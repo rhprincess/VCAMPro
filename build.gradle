@@ -1,20 +1,27 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    ext {
+        kotlin_version = '1.8.10'
+        compose_version = '1.4.2'
+        nav_version = '2.5.3'
+    }
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://maven.aliyun.com/repository/central' }
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        maven { url 'https://jitpack.io' }
+        // 作为 Xposed 模块使用务必添加，其它情况可选
+        maven { url 'https://api.xposed.info/' }
+        // MavenCentral 有 2 小时缓存，若无法集成最新版本请添加此地址
+        maven { url 'https://s01.oss.sonatype.org/content/repositories/releases/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.0'
+        classpath 'com.android.tools.build:gradle:8.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
 }
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }

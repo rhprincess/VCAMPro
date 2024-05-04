@@ -1,4 +1,4 @@
-package com.example.vcam;
+package io.twinkle.vcampro;
 
 import android.content.Context;
 

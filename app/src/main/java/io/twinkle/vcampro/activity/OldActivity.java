@@ -1,11 +1,8 @@
-package com.example.vcam;
+package io.twinkle.vcampro.activity;
 
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -18,10 +15,15 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import androidx.activity.ComponentActivity;
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.io.IOException;
 
-public class MainActivity extends Activity {
+import io.twinkle.vcampro.R;
+
+public class OldActivity extends ComponentActivity {
 
     private Switch force_show_switch;
     private Switch disable_switch;
@@ -30,11 +32,11 @@ public class MainActivity extends Activity {
     private Switch disable_toast_switch;
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults.length > 0) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                Toast.makeText(MainActivity.this, R.string.permission_lack_warn, Toast.LENGTH_SHORT).show();
+                Toast.makeText(OldActivity.this, R.string.permission_lack_warn, Toast.LENGTH_SHORT).show();
             }else {
                 File camera_dir = new File (Environment.getExternalStorageDirectory().getAbsolutePath()+"/DCIM/Camera1/");
                 if (!camera_dir.exists()){
@@ -82,7 +84,7 @@ public class MainActivity extends Activity {
 
         disable_switch.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isPressed()) {
-                if (!has_permission()) {
+                if (has_permission()) {
                     request_permission();
                 } else {
                     File disable_file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera1/disable.jpg");
@@ -104,7 +106,7 @@ public class MainActivity extends Activity {
 
         force_show_switch.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isPressed()) {
-                if (!has_permission()) {
+                if (has_permission()) {
                     request_permission();
                 } else {
                     File force_show_switch = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera1/force_show.jpg");
@@ -128,7 +130,7 @@ public class MainActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (compoundButton.isPressed()) {
-                    if (!has_permission()) {
+                    if (has_permission()) {
                         request_permission();
                     } else {
                         File play_sound_switch = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera1/no-silent.jpg");
@@ -151,7 +153,7 @@ public class MainActivity extends Activity {
 
         force_private_dir.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isPressed()) {
-                if (!has_permission()) {
+                if (has_permission()) {
                     request_permission();
                 } else {
                     File force_private_dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera1/private_dir.jpg");
@@ -174,7 +176,7 @@ public class MainActivity extends Activity {
 
         disable_toast_switch.setOnCheckedChangeListener((compoundButton, b) -> {
             if (compoundButton.isPressed()) {
-                if (!has_permission()) {
+                if (has_permission()) {
                     request_permission();
                 } else {
                     File disable_toast_file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/Camera1/no_toast.jpg");
@@ -197,34 +199,29 @@ public class MainActivity extends Activity {
     }
 
     private void request_permission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
-                    || this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle(R.string.permission_lack_warn);
-                builder.setMessage(R.string.permission_description);
+        if (this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
+                || this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(OldActivity.this);
+            builder.setTitle(R.string.permission_lack_warn);
+            builder.setMessage(R.string.permission_description);
 
-                builder.setNegativeButton(R.string.negative, (dialogInterface, i) -> Toast.makeText(MainActivity.this, R.string.permission_lack_warn, Toast.LENGTH_SHORT).show());
+            builder.setNegativeButton(R.string.negative, (dialogInterface, i) -> Toast.makeText(OldActivity.this, R.string.permission_lack_warn, Toast.LENGTH_SHORT).show());
 
-                builder.setPositiveButton(R.string.positive, (dialogInterface, i) -> requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1));
-                builder.show();
-            }
+            builder.setPositiveButton(R.string.positive, (dialogInterface, i) -> requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1));
+            builder.show();
         }
     }
 
     private boolean has_permission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            return this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_DENIED
-                    && this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_DENIED;
-        }
-        return true;
+        return this.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
+                || this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED;
     }
 
 
     private void sync_statue_with_files() {
         Log.d(this.getApplication().getPackageName(), "【VCAM】[sync]同步开关状态");
 
-        if (!has_permission()){
+        if (has_permission()){
             request_permission();
         }else {
             File camera_dir = new File (Environment.getExternalStorageDirectory().getAbsolutePath()+"/DCIM/Camera1");

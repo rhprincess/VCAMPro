@@ -1,4 +1,4 @@
-package com.example.vcam;
+package io.twinkle.vcampro;
 
 import android.annotation.SuppressLint;
 import android.graphics.ImageFormat;
@@ -10,8 +10,6 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.util.Log;
 import android.view.Surface;
-
-import com.example.vcam.HookMain;
 
 import java.io.File;
 import java.io.IOException;
