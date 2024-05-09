@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="xposed_scope">
+        <item>tv.danmaku.bili</item>
+        <item>com.smile.gifmaker</item>
+        <item>com.ss.android.ugc.aweme</item>
+        <item>com.xunmeng.pinduoduo</item>
+        <item>com.sina.weibo</item>
+        <item>com.tencent.mm</item>
+        <item>com.xingin.xhs</item>
+    </string-array>
+</resources>

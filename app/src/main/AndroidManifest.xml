@@ -23,6 +23,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".activity.AppDetailActivity"
+            android:theme="@style/Theme.VCAM" />
+
 
         <!-- 设置为 Xposed 模块 -->
         <meta-data
@@ -43,6 +47,10 @@
         <meta-data
             android:name="xposedsharedprefs"
             android:value="true" />
+
+        <meta-data
+            android:name="xposedscope"
+            android:resource="@array/xposed_scope" />
     </application>
 
     <uses-permission

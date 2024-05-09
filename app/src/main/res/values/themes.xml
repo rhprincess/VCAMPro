@@ -2,5 +2,7 @@
     <!-- Base application theme. -->
     <style name="Theme.VCAM" parent="android:Theme.DeviceDefault.Light">
         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowShowAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 </resources>
